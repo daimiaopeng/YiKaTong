@@ -13,3 +13,4 @@
   site-packages\pytesseract 目录把 pytesseract.py文件里的 tesseract_cmd = 'tesseract' 改成 tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe'
   
   然后点击main.py就行了，密码会保存在password.txt文件中，可以在main.py里面改指定的参数
+  遍历密码速度有些慢，可以改一下文件参数，同时运行多个，这样速度可以加快很多
