@@ -4,7 +4,7 @@
 使用方法：
   下载main.py文件和下载https://www.lanzous.com/i2cothe https://www.lanzous.com/i2coucf
 
-  请根据相应的学校的一卡通网站更改相应的uri，一般只要改变学校简称字母缩写而已
+  请根据相应的学校的一卡通网站更改相应的url，一般只要改变学校简称字母缩写而已
   
   在cmd中输入pip install pytesseract
   把Tesseract-OCR解压到C:\Program Files (x86)目录
