@@ -10,10 +10,10 @@ testdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR"'
 
 
 session = requests.session()
-login_url = 'http://ykt.jsu.edu.cn/Login/LoginBySnoQuery'
-index_url = 'http://ykt.jsu.edu.cn/'
-img_url = 'http://ykt.jsu.edu.cn/Login/GetValidateCode?time=1541822935426'
-user_url = 'http://ykt.jsu.edu.cn/User/User'
+login_url = 'http://*******/Login/LoginBySnoQuery'
+index_url = 'http://*********/'
+img_url = 'http://***********/Login/GetValidateCode?time=1541822935426'
+user_url = 'http://***********/User/User'
 
 def get_valicode():
     name = 'valicode.jpg'
@@ -27,7 +27,7 @@ def get_valicode():
 
 def login(password):
     data = {
-        'sno': '2017403166',
+        'sno': '*********',
         'pwd': base64.b64encode(str(password).encode('utf-8')).decode('utf-8'),
         'ValiCode': get_valicode(),
         'remember': '1',
