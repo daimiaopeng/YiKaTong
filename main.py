@@ -7,7 +7,8 @@ import pytesseract
 
 # 这里填Tesseract-OCR目录把C:\\Program Files (x86)\\Tesseract-OCR改成你的路径
 testdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR"'
-
+#这里填你的学号
+xh = ''
 
 session = requests.session()
 login_url = 'http://ykt.jsu.edu.cn/Login/LoginBySnoQuery'
@@ -27,7 +28,8 @@ def get_valicode():
 
 def login(password):
     data = {
-        'sno': '2017403166',
+        #
+        'sno': xh,
         'pwd': base64.b64encode(str(password).encode('utf-8')).decode('utf-8'),
         'ValiCode': get_valicode(),
         'remember': '1',
